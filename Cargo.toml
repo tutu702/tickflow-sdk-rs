@@ -1,0 +1,13 @@
+[workspace]
+members = ["tickflow"]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.96"
+license = "MIT"
+authors = ["tutu702"]
+repository = "https://github.com/tutu702/tickflow-sdk-rs"
+
+[workspace.dependencies]

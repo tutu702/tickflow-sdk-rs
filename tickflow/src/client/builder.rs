@@ -31,7 +31,7 @@ impl TickFlowBuilder {
     }
 
     pub fn base_url(mut self, base_url: impl AsRef<str>) -> Self {
-        if let Ok(parsed) = Url::parse(&base_url.as_ref()) {
+        if let Ok(parsed) = Url::parse(base_url.as_ref()) {
             self.config.base_url = parsed.clone();
             self.config.ws_url = derive_ws_url(&parsed);
         }
@@ -55,12 +55,14 @@ impl TickFlowBuilder {
     pub fn build(self) -> Result<TickFlow> {
         let config = Arc::new(self.config);
         let http = Arc::new(HttpClient::new(Arc::clone(&config))?);
-        let quotes = resources::quotes::Quotes::new(Arc::clone(&http));
+        let quotes = resources::Quotes::new(Arc::clone(&http));
+        let klines = resources::Klines::new(Arc::clone(&http));
 
         Ok(TickFlow {
             http,
             config,
             quotes,
+            klines,
         })
     }
 }

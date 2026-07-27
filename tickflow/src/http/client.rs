@@ -59,8 +59,12 @@ impl HttpClient {
         serde_json::from_str(&body).map_err(|e| Error::Parse(format!("{e}; body={}", &body)))
     }
 
-    pub async fn get<T: DeserializeOwned>(&self, path: &str) -> Result<T> {
-        let req = self.request(Method::GET, path)?;
+    pub async fn get<Q, T>(&self, path: &str, query: &Q) -> Result<T>
+    where
+        Q: Serialize + ?Sized,
+        T: DeserializeOwned,
+    {
+        let req = self.request(Method::GET, path)?.query(query);
         self.execute_json(req).await
     }
 

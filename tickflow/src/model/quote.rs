@@ -62,7 +62,7 @@ impl Region {
         }
     }
 
-    pub fn from_str(s: &str) -> Option<Self> {
+    pub fn parse(s: &str) -> Option<Self> {
         match s {
             "CN" => Some(Region::CN),
             "HK" => Some(Region::HK),
@@ -107,7 +107,7 @@ impl SessionStatus {
         }
     }
 
-    pub fn from_str(s: &str) -> Option<Self> {
+    pub fn parse(s: &str) -> Option<Self> {
         match s {
             "pre_market" => Some(Self::PreMarket),
             "regular" => Some(Self::Regular),

@@ -53,6 +53,7 @@ impl HttpClient {
         let resp = req.send().await?;
         let status = resp.status();
         let body = resp.text().await?;
+        tracing::debug!(%status, body_bytes = body.len(), "response received");
         if !status.is_success() {
             return Err(Error::Api(format!("status: {status} {body}")));
         }
@@ -64,6 +65,7 @@ impl HttpClient {
         Q: Serialize + ?Sized,
         T: DeserializeOwned,
     {
+        tracing::debug!(method = "GET", path, "sending HTTP request");
         let req = self.request(Method::GET, path)?.query(query);
         self.execute_json(req).await
     }
@@ -73,6 +75,7 @@ impl HttpClient {
         B: Serialize,
         T: DeserializeOwned,
     {
+        tracing::debug!(method = "POST", path, "sending HTTP request");
         let req = self.request(Method::POST, path)?.json(body);
         self.execute_json(req).await
     }

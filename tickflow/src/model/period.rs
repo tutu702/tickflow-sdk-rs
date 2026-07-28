@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::fmt;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, Serialize, Deserialize)]
 pub enum Period {
     #[serde(rename = "1m")]
     M1,
@@ -16,6 +16,7 @@ pub enum Period {
     #[serde(rename = "60m")]
     M60,
     #[serde(rename = "1d")]
+    #[default]
     D1,
     #[serde(rename = "1w")]
     W1,

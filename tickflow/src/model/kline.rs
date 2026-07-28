@@ -1,4 +1,8 @@
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
+
+use super::{AdjustType, Period};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct KlineData {
@@ -52,4 +56,32 @@ impl KlineData {
 #[derive(Debug, Clone, Deserialize)]
 pub struct KlinesResponse {
     pub data: KlineData,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct BatchKlinesResponse {
+    pub data: HashMap<String, KlineData>,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct KlinesParams {
+    pub period: Period,
+    pub count: u32,
+    pub adjust: AdjustType,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<i64>,
+}
+
+impl Default for KlinesParams {
+    fn default() -> Self {
+        Self {
+            period: Period::default(),
+            count: 100,
+            adjust: AdjustType::default(),
+            start_time: None,
+            end_time: None,
+        }
+    }
 }

@@ -66,6 +66,12 @@ impl From<Symbol> for String {
     }
 }
 
+impl From<&Symbol> for String {
+    fn from(s: &Symbol) -> Self {
+        s.as_str().to_owned()
+    }
+}
+
 fn validate(s: &str) -> Result<()> {
     if s.is_empty() {
         return Err(Error::Config(ConfigError::new("symbol cannot be empty")));

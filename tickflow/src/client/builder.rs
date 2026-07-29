@@ -58,6 +58,7 @@ impl TickFlowBuilder {
         let instruments = resources::Instruments::new(Arc::clone(&http));
         let quotes = resources::Quotes::new(Arc::clone(&http));
         let klines = resources::Klines::new(Arc::clone(&http));
+        let universes = resources::Universes::new(Arc::clone(&http));
 
         Ok(TickFlow {
             http,
@@ -65,6 +66,7 @@ impl TickFlowBuilder {
             instruments,
             quotes,
             klines,
+            universes,
         })
     }
 }

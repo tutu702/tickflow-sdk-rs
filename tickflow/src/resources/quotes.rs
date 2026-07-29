@@ -2,15 +2,12 @@ use crate::{
     error::{Error, Result},
     http::HttpClient,
     model::{BatchQuotesResponse, Quote, QuoteParams},
-    resources::BATCH_CONCURRENCY,
+    resources::{BATCH_CHUNK_SIZE, BATCH_CONCURRENCY},
 };
 use futures::{StreamExt, TryStreamExt, stream};
 use reqwest::Method;
 use serde::{Serialize, Serializer};
 use std::{collections::HashMap, sync::Arc};
-
-const CHUNK_SIZE: usize = 500;
-
 #[derive(Clone)]
 pub struct Quotes {
     http: Arc<HttpClient>,
@@ -107,7 +104,7 @@ impl Quotes {
         }
 
         let is_universes = matches!(mode, QueryMode::Universes(_));
-        let chunks: Vec<Vec<String>> = items.chunks(CHUNK_SIZE).map(|c| c.to_vec()).collect();
+        let chunks: Vec<Vec<String>> = items.chunks(BATCH_CHUNK_SIZE).map(|c| c.to_vec()).collect();
 
         let http = Arc::clone(&self.http);
         let results = stream::iter(chunks)

@@ -3,7 +3,7 @@ use std::sync::Arc;
 use crate::{
     error::Result,
     http::HttpClient,
-    resources::{klines::Klines, quotes::Quotes},
+    resources::{Instruments, Klines, Quotes},
 };
 
 mod builder;
@@ -15,6 +15,7 @@ pub use config::Config;
 pub struct TickFlow {
     pub(crate) http: Arc<HttpClient>,
     pub(crate) config: Arc<Config>,
+    pub(crate) instruments: Instruments,
     pub(crate) quotes: Quotes,
     pub(crate) klines: Klines,
 }
@@ -46,5 +47,9 @@ impl TickFlow {
 
     pub fn klines(&self) -> &Klines {
         &self.klines
+    }
+
+    pub fn instruments(&self) -> &Instruments {
+        &self.instruments
     }
 }

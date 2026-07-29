@@ -55,12 +55,14 @@ impl TickFlowBuilder {
     pub fn build(self) -> Result<TickFlow> {
         let config = Arc::new(self.config);
         let http = Arc::new(HttpClient::new(Arc::clone(&config))?);
+        let instruments = resources::Instruments::new(Arc::clone(&http));
         let quotes = resources::Quotes::new(Arc::clone(&http));
         let klines = resources::Klines::new(Arc::clone(&http));
 
         Ok(TickFlow {
             http,
             config,
+            instruments,
             quotes,
             klines,
         })

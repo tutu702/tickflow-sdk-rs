@@ -16,9 +16,12 @@ pub struct Quote {
     pub session: Option<SessionStatus>,
 }
 
-#[derive(Debug, Clone, Serialize)]
-pub struct BatchQuotesRequest {
-    pub symbols: Vec<String>,
+#[derive(Serialize)]
+pub struct QuoteParams {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub symbols: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub universes: Option<Vec<String>>,
 }
 
 #[derive(Debug, Clone, Deserialize)]

@@ -9,10 +9,10 @@ use crate::{
         AdjustType, KlineData, KlinesParams, Period,
         kline::{BatchKlinesResponse, KlinesResponse},
     },
+    resources::BATCH_CONCURRENCY,
 };
 
 const MAX_SYMBOLS_PER_BATCH: usize = 100;
-const BATCH_CONCURRENCY: usize = 5;
 
 pub struct Klines {
     http: Arc<HttpClient>,

@@ -63,11 +63,22 @@ pub struct BatchKlinesResponse {
     pub data: HashMap<String, KlineData>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ExfactorsData {
+    pub timestamp: i64,
+    pub ex_factor: f64,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct ExfactorsResponse {
+    pub data: HashMap<String, Vec<ExfactorsData>>,
+}
 #[derive(Debug, Clone, Serialize)]
 pub struct KlinesParams {
     pub period: Period,
     pub count: u32,
-    pub adjust: AdjustType,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub adjust: Option<AdjustType>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -79,7 +90,7 @@ impl Default for KlinesParams {
         Self {
             period: Period::default(),
             count: 100,
-            adjust: AdjustType::default(),
+            adjust: Some(AdjustType::default()),
             start_time: None,
             end_time: None,
         }

@@ -1,4 +1,5 @@
 pub mod adjust;
+pub mod depth;
 pub mod instrument;
 pub mod kline;
 pub mod period;
@@ -11,5 +12,5 @@ pub use instrument::{Instrument, InstrumentsResponse};
 pub use kline::{KlineData, KlinesParams};
 pub use period::Period;
 pub use quote::{BatchQuotesResponse, Quote, QuoteExt, QuoteExtension, QuoteParams};
-pub use symbol::{Region, Symbol};
+pub use symbol::Symbol;
 pub use universe::{BatchUniversesResponse, Universe, UniverseResponse};

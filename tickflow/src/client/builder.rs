@@ -59,6 +59,7 @@ impl TickFlowBuilder {
         let quotes = resources::Quotes::new(Arc::clone(&http));
         let klines = resources::Klines::new(Arc::clone(&http));
         let universes = resources::Universes::new(Arc::clone(&http));
+        let depth = resources::Depth::new(Arc::clone(&http));
 
         Ok(TickFlow {
             http,
@@ -67,6 +68,7 @@ impl TickFlowBuilder {
             quotes,
             klines,
             universes,
+            depth,
         })
     }
 }

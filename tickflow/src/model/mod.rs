@@ -1,5 +1,6 @@
 pub mod adjust;
 pub mod depth;
+pub mod exchange;
 pub mod instrument;
 pub mod kline;
 pub mod period;

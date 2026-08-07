@@ -3,7 +3,7 @@ use std::sync::Arc;
 use crate::{
     error::Result,
     http::HttpClient,
-    resources::{Depth, Instruments, Klines, Quotes, Universes, exchanges::Exchanges},
+    resources::{Depth, Financials, Instruments, Klines, Quotes, Universes, exchanges::Exchanges},
 };
 
 mod builder;
@@ -21,6 +21,7 @@ pub struct TickFlow {
     pub(crate) universes: Universes,
     pub(crate) depth: Depth,
     pub(crate) exchanges: Exchanges,
+    pub(crate) financials: Financials,
 }
 
 impl TickFlow {
@@ -66,5 +67,9 @@ impl TickFlow {
 
     pub fn exchanges(&self) -> &Exchanges {
         &self.exchanges
+    }
+
+    pub fn financials(&self) -> &Financials {
+        &self.financials
     }
 }

@@ -1,6 +1,7 @@
 pub mod adjust;
 pub mod depth;
 pub mod exchange;
+pub mod financial;
 pub mod instrument;
 pub mod kline;
 pub mod period;
@@ -9,6 +10,9 @@ pub mod symbol;
 pub mod universe;
 
 pub use adjust::AdjustType;
+pub use financial::{
+    BalanceSheetRecord, CashFlowRecord, IncomeRecord, MetricsRecord, SharesRecord,
+};
 pub use instrument::{Instrument, InstrumentsResponse};
 pub use kline::{KlineData, KlinesParams};
 pub use period::Period;

@@ -61,6 +61,7 @@ impl TickFlowBuilder {
         let universes = resources::Universes::new(Arc::clone(&http));
         let depth = resources::Depth::new(Arc::clone(&http));
         let exchanges = resources::Exchanges::new(Arc::clone(&http));
+        let financials = resources::Financials::new(Arc::clone(&http));
 
         Ok(TickFlow {
             http,
@@ -71,6 +72,7 @@ impl TickFlowBuilder {
             universes,
             depth,
             exchanges,
+            financials,
         })
     }
 }

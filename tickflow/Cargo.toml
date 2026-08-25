@@ -1,24 +1,27 @@
 [package]
 name = "tickflow"
-version = "0.1.0"
-edition = "2024"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Rust SDK for TickFlow market data API, supporting A-share, ETF, US stocks, Hong Kong stocks, etc."
+keywords = ["tickflow", "finance", "stocks"]
+homepage = "https://tickflow.org"
+documentation = "https://docs.tickflow.org"
+readme = "../README.md"
 
 [dependencies]
-futures = "0.3"
-reqwest = { version = "0.13", default-features = false, features = [
-    "json",
-    "query",
-    "gzip",
-    "deflate",
-    "native-tls",
-] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-thiserror = "2.0"
-tokio = { version = "1.53", features = ["rt-multi-thread", "macros"] }
-tracing = "0.1"
-url = "2.5"
+futures.workspace = true
+reqwest.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+url.workspace = true
 
 [dev-dependencies]
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-wiremock = "0.6"
+tracing-subscriber.workspace = true
+wiremock.workspace = true

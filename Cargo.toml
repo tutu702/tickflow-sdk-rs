@@ -11,3 +11,29 @@ authors = ["tutu702"]
 repository = "https://github.com/tutu702/tickflow-sdk-rs"
 
 [workspace.dependencies]
+# async runtime
+futures = "0.3"
+tokio = { version = "1.53", features = ["rt-multi-thread", "macros"] }
+# http
+reqwest = { version = "0.13", default-features = false, features = [
+    "json",
+    "query",
+    "gzip",
+    "deflate",
+    "native-tls",
+] }
+url = "2.5"
+# serde
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+# errors / logging
+thiserror = "2.0"
+tracing = "0.1"
+# dev
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+wiremock = "0.6"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "symbols"

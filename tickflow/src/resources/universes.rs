@@ -58,7 +58,7 @@ impl Universes {
             let req = BatchUniversesRequest {
                 ids: chunk.to_vec(),
             };
-            let resp: BatchUniversesResponse = self.http.post("/v1/universes", &req).await?;
+            let resp: BatchUniversesResponse = self.http.post("/v1/universes/batch", &req).await?;
             out.extend(resp.data);
         }
         Ok(out)

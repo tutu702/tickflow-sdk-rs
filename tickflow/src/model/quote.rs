@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use super::symbol::Region;
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Quote {
     pub symbol: String,
@@ -47,44 +49,6 @@ pub struct QuoteExt {
     pub change_pct: Option<f64>,
     pub name: Option<String>,
     pub turnover_rate: Option<f64>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum Region {
-    CN,
-    HK,
-    US,
-}
-
-impl Region {
-    pub fn as_str(&self) -> &'static str {
-        match self {
-            Region::CN => "CN",
-            Region::HK => "HK",
-            Region::US => "US",
-        }
-    }
-
-    pub fn parse(s: &str) -> Option<Self> {
-        match s {
-            "CN" => Some(Region::CN),
-            "HK" => Some(Region::HK),
-            "US" => Some(Region::US),
-            _ => None,
-        }
-    }
-}
-
-impl From<Region> for &'static str {
-    fn from(val: Region) -> Self {
-        val.as_str()
-    }
-}
-
-impl std::fmt::Display for Region {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.as_str())
-    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]

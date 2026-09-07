@@ -15,7 +15,7 @@ pub use config::Config;
 pub struct TickFlow {
     pub(crate) http: Arc<HttpClient>,
     pub(crate) config: Arc<Config>,
-    pub(crate) instruments: Instruments,
+    pub(crate) instruments: Arc<Instruments>,
     pub(crate) quotes: Quotes,
     pub(crate) klines: Klines,
     pub(crate) universes: Universes,

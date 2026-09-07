@@ -17,6 +17,10 @@ pub enum Error {
     /// Failed to parse a response body.
     #[error("parse error: {0}")]
     Parse(String),
+
+    /// Failed to assemble a DataFrame from API data.
+    #[error("dataframe error: {0}")]
+    DataFrame(String),
 }
 
 #[derive(Debug, Error)]

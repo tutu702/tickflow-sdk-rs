@@ -13,7 +13,10 @@ documentation = "https://docs.tickflow.org"
 readme = "../README.md"
 
 [dependencies]
+chrono.workspace = true
+chrono-tz.workspace = true
 futures.workspace = true
+polars.workspace = true
 reqwest.workspace = true
 serde.workspace = true
 serde_json.workspace = true

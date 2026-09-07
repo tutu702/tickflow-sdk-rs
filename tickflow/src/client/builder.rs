@@ -3,6 +3,7 @@ use std::{sync::Arc, time::Duration};
 use url::Url;
 
 use crate::{
+    cache::InstrumentNameCache,
     client::{Config, TickFlow, config::derive_ws_url},
     error::Result,
     http::HttpClient,
@@ -55,9 +56,10 @@ impl TickFlowBuilder {
     pub fn build(self) -> Result<TickFlow> {
         let config = Arc::new(self.config);
         let http = Arc::new(HttpClient::new(Arc::clone(&config))?);
-        let instruments = resources::Instruments::new(Arc::clone(&http));
+        let instruments = Arc::new(resources::Instruments::new(Arc::clone(&http)));
         let quotes = resources::Quotes::new(Arc::clone(&http));
-        let klines = resources::Klines::new(Arc::clone(&http));
+        let name_cache = Arc::new(InstrumentNameCache::new(Arc::clone(&http)));
+        let klines = resources::Klines::new(Arc::clone(&http), Arc::clone(&name_cache));
         let universes = resources::Universes::new(Arc::clone(&http));
         let depth = resources::Depth::new(Arc::clone(&http));
         let exchanges = resources::Exchanges::new(Arc::clone(&http));

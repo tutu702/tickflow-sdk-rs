@@ -1,4 +1,5 @@
 use tickflow::client::TickFlow;
+use tickflow::model::KlineResponse;
 use tickflow::resources::klines::KlinesBuilderExt;
 
 #[tokio::main]
@@ -7,7 +8,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let tf = TickFlow::free()?;
 
     // 查询日 K 线数据
-    let klines = tf.klines().get("600000.SH").count(100).send().await?;
+    let klines = match tf.klines().get("600000.SH").count(100).send().await? {
+        KlineResponse::Raw(d) => d,
+        KlineResponse::DataFrame(_) => unreachable!(),
+    };
     if let Some(last) = klines.last_close() {
         println!("最新收盘价: {last}");
     }

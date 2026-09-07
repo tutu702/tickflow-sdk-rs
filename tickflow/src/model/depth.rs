@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use crate::model::quote::Region;
+use crate::model::symbol::Region;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MarketDepth {

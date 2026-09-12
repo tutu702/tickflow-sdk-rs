@@ -1,15 +1,13 @@
-use std::{collections::HashMap, sync::Arc};
-
 use futures::{StreamExt, TryStreamExt, stream};
-use serde::{Deserialize, Serialize, de::DeserializeOwned};
+use polars::prelude::*;
+use serde::{Serialize, de::DeserializeOwned};
+use std::{collections::HashMap, sync::Arc};
 
 use crate::{
     error::{Error, Result},
     http::{HttpClient, merge_maps},
-    model::{
-        BalanceSheetRecord, CashFlowRecord, MetricsRecord, SharesRecord, financial::IncomeRecord,
-    },
-    resources::{BATCH_CHUNK_SIZE, BATCH_CONCURRENCY},
+    model::{BalanceSheetRecord, CashFlowRecord, IncomeRecord, MetricsRecord, SharesRecord},
+    resources::{BATCH_CHUNK_SIZE, BATCH_CONCURRENCY, DataResponse, records_to_dataframe},
 };
 
 /// Financial statement type — covers all five Python endpoints.
@@ -49,6 +47,8 @@ pub struct StatementParams {
     end_date: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     latest: Option<bool>,
+    #[serde(skip)]
+    as_dataframe: bool,
 }
 
 impl StatementParams {
@@ -76,6 +76,18 @@ impl StatementParams {
         self
     }
 
+    #[must_use]
+    pub fn as_dataframe(mut self, value: bool) -> Self {
+        self.as_dataframe = value;
+        self
+    }
+
+    /// `true` when the caller requested DataFrame output.
+    #[must_use]
+    pub fn want_dataframe(&self) -> bool {
+        self.as_dataframe
+    }
+
     fn into_query(self, symbols: String) -> QueryParams {
         QueryParams {
             symbols,
@@ -97,6 +109,12 @@ struct QueryParams {
     latest: Option<bool>,
 }
 
+#[derive(Debug)]
+pub enum FinancialResponse<T> {
+    Raw(HashMap<String, Vec<T>>),
+    DataFrame(DataFrame),
+}
+
 pub struct Financials {
     http: Arc<HttpClient>,
 }
@@ -106,12 +124,12 @@ impl Financials {
         Self { http }
     }
 
-    async fn query<I, S, T>(
+    async fn fetch_records<I, S, T>(
         &self,
         stmt: Statement,
         symbols: I,
         params: Option<StatementParams>,
-    ) -> Result<HashMap<String, T>>
+    ) -> Result<HashMap<String, Vec<T>>>
     where
         I: IntoIterator<Item = S>,
         S: Into<String>,
@@ -128,12 +146,12 @@ impl Financials {
             .collect();
         let http = Arc::clone(&self.http);
 
-        let result: Vec<HashMap<String, T>> = stream::iter(chunks)
+        let result: Vec<HashMap<String, Vec<T>>> = stream::iter(chunks)
             .map(move |chunk| {
                 let http = Arc::clone(&http);
                 let params = params.clone();
                 async move {
-                    let out: DataResponse<T> = http
+                    let out: DataResponse<Vec<T>> = http
                         .get(
                             stmt.endpoint(),
                             &params.unwrap_or_default().into_query(chunk),
@@ -149,12 +167,32 @@ impl Financials {
         Ok(merge_maps(result))
     }
 
+    async fn query<I, S, T>(
+        &self,
+        stmt: Statement,
+        symbols: I,
+        params: Option<StatementParams>,
+    ) -> Result<FinancialResponse<T>>
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<String>,
+        T: DeserializeOwned + Serialize + Send + 'static,
+    {
+        let want_df = params.as_ref().is_some_and(|p| p.want_dataframe());
+        let raw = self.fetch_records(stmt, symbols, params).await?;
+        if want_df {
+            Ok(FinancialResponse::DataFrame(records_to_dataframe(&raw)?))
+        } else {
+            Ok(FinancialResponse::Raw(raw))
+        }
+    }
+
     #[must_use]
     pub async fn income<I, S>(
         &self,
         symbols: I,
         params: Option<StatementParams>,
-    ) -> Result<HashMap<String, Vec<IncomeRecord>>>
+    ) -> Result<FinancialResponse<IncomeRecord>>
     where
         I: IntoIterator<Item = S>,
         S: Into<String>,
@@ -167,7 +205,7 @@ impl Financials {
         &self,
         symbols: I,
         params: Option<StatementParams>,
-    ) -> Result<HashMap<String, Vec<BalanceSheetRecord>>>
+    ) -> Result<FinancialResponse<BalanceSheetRecord>>
     where
         I: IntoIterator<Item = S>,
         S: Into<String>,
@@ -180,7 +218,7 @@ impl Financials {
         &self,
         symbols: I,
         params: Option<StatementParams>,
-    ) -> Result<HashMap<String, Vec<CashFlowRecord>>>
+    ) -> Result<FinancialResponse<CashFlowRecord>>
     where
         I: IntoIterator<Item = S>,
         S: Into<String>,
@@ -193,7 +231,7 @@ impl Financials {
         &self,
         symbols: I,
         params: Option<StatementParams>,
-    ) -> Result<HashMap<String, Vec<MetricsRecord>>>
+    ) -> Result<FinancialResponse<MetricsRecord>>
     where
         I: IntoIterator<Item = S>,
         S: Into<String>,
@@ -206,16 +244,11 @@ impl Financials {
         &self,
         symbols: I,
         params: Option<StatementParams>,
-    ) -> Result<HashMap<String, Vec<SharesRecord>>>
+    ) -> Result<FinancialResponse<SharesRecord>>
     where
         I: IntoIterator<Item = S>,
         S: Into<String>,
     {
         self.query(Statement::Shares, symbols, params).await
     }
-}
-
-#[derive(Deserialize)]
-struct DataResponse<T> {
-    data: HashMap<String, T>,
 }

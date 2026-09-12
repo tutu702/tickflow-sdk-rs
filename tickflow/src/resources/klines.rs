@@ -1,6 +1,6 @@
 use futures::{StreamExt, TryStreamExt, stream};
 use polars::prelude::*;
-use serde::{Deserialize, Serialize, de::DeserializeOwned};
+use serde::{Serialize, de::DeserializeOwned};
 use std::{collections::HashMap, sync::Arc};
 
 use crate::{
@@ -12,7 +12,7 @@ use crate::{
         IntradayResponse, KlineData, KlineResponse, KlinesParams, Period, broadcast_to,
         format_trade_columns, kline::KlinesResponse, region_for_symbol, tz_for_region,
     },
-    resources::{BATCH_CHUNK_SIZE, BATCH_CONCURRENCY},
+    resources::{BATCH_CHUNK_SIZE, BATCH_CONCURRENCY, DataResponse},
 };
 
 pub struct Klines {
@@ -189,11 +189,6 @@ struct BatchParams {
     symbols: String,
     #[serde(flatten)]
     params: KlinesParams,
-}
-
-#[derive(Deserialize)]
-struct DataResponse<T> {
-    data: HashMap<String, T>,
 }
 
 /// Shared setter methods for the single-symbol and batch kline builders.

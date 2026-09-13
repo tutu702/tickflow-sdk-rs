@@ -19,6 +19,8 @@ pub use kline::{
     KlineData, KlineResponse, KlinesParams, broadcast_to, format_trade_columns,
 };
 pub use period::Period;
-pub use quote::{BatchQuotesResponse, Quote, QuoteExt, QuoteExtension, QuoteParams};
+pub use quote::{
+    BatchQuotesResponse, Quote, QuoteExt, QuoteExtension, QuoteParams, QuoteResponse, SessionStatus,
+};
 pub use symbol::{Region, Symbol, region_for_symbol, tz_for_region};
 pub use universe::{BatchUniversesResponse, Universe, UniverseResponse};

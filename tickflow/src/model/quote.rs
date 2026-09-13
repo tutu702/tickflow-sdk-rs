@@ -1,4 +1,6 @@
+use polars::prelude::*;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 use super::symbol::Region;
 
@@ -91,4 +93,16 @@ impl std::fmt::Display for SessionStatus {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.as_str())
     }
+}
+
+/// Outcome of a quotes request.
+///
+/// `Raw` is the unchanged `symbol -> Quote` map; `DataFrame` is a long-format
+/// polars frame (one row per symbol) — region-aware `trade_date` /
+/// `trade_time`, flattened `ext.*` columns, mirroring the Python
+/// `_quotes_to_dataframe` helper.
+#[derive(Debug)]
+pub enum QuoteResponse {
+    Raw(HashMap<String, Quote>),
+    DataFrame(DataFrame),
 }

@@ -1,3 +1,19 @@
+## [0.2.0] - 2026-09-13
+
+### 🚀 Features
+
+- *(klines)* [**breaking**] Add polars DataFrame support and instrument-name cache
+- *(financials)* [**breaking**] Add polars DataFrame output and reorder record fields
+- *(quotes)* [**breaking**] Add polars DataFrame support with flattened ext.* columns
+
+### 💼 Other
+
+- V0.10
+
+### 📚 Documentation
+
+- *(examples)* Add financials resource usage example
+- Expand public API documentation
 ## [0.1.0] - 2026-08-26
 
 ### 🚀 Features

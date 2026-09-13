@@ -1,9 +1,4 @@
-//! In-memory cache that lazily resolves `symbol -> instrument name` by
-//! calling the `/v1/instruments` endpoint on demand.
-//!
-//! Mirrors the Python SDK's [`InstrumentNameCache`], minus the on-disk
-//! persistence layer. Subsequent lookups for the same symbol skip the
-//! network entirely.
+//! Local instrument name in-memory cache for TickFlow.
 
 use std::collections::HashMap;
 use std::sync::Arc;

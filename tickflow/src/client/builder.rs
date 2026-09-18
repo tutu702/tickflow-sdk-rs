@@ -64,6 +64,7 @@ impl TickFlowBuilder {
         let depth = resources::Depth::new(Arc::clone(&http));
         let exchanges = resources::Exchanges::new(Arc::clone(&http));
         let financials = resources::Financials::new(Arc::clone(&http));
+        let stream = resources::MarketStream::new(&config);
 
         Ok(TickFlow {
             http,
@@ -75,6 +76,7 @@ impl TickFlowBuilder {
             depth,
             exchanges,
             financials,
+            stream,
         })
     }
 }

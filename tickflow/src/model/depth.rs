@@ -6,13 +6,13 @@ use crate::model::symbol::Region;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MarketDepth {
-    pub region: Region,
     pub symbol: String,
+    pub region: Region,
     pub timestamp: i64,
-    pub ask_prices: Vec<f64>,
-    pub ask_volumes: Vec<usize>,
     pub bid_prices: Vec<f64>,
     pub bid_volumes: Vec<usize>,
+    pub ask_prices: Vec<f64>,
+    pub ask_volumes: Vec<usize>,
 }
 
 #[derive(Debug, Clone, Deserialize)]

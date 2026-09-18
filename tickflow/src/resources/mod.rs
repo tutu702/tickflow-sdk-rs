@@ -9,6 +9,7 @@ pub mod financials;
 pub mod instruments;
 pub mod klines;
 pub mod quotes;
+pub mod stream;
 pub mod universes;
 
 pub use depth::Depth;
@@ -17,6 +18,7 @@ pub use financials::Financials;
 pub use instruments::Instruments;
 pub use klines::Klines;
 pub use quotes::Quotes;
+pub use stream::{Channel, MarketStream};
 pub use universes::Universes;
 
 pub(crate) const BATCH_CONCURRENCY: usize = 5;

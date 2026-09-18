@@ -7,16 +7,16 @@ use super::symbol::Region;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Quote {
     pub symbol: String,
+    pub region: Region,
     pub last_price: f64,
+    pub prev_close: f64,
     pub open: f64,
     pub high: f64,
     pub low: f64,
-    pub prev_close: f64,
     pub volume: i64,
     pub amount: f64,
     pub timestamp: i64,
     pub ext: Option<QuoteExtension>,
-    pub region: Region,
     pub session: Option<SessionStatus>,
 }
 

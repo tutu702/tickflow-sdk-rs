@@ -8,9 +8,9 @@
 //! # Quick start
 //!
 //! ```no_run
-//! use tickflow_sdk_rs::TickFlow;
+//! use tickflow::client::TickFlow;
 //!
-//! # async fn run() -> Result<(), tickflow_sdk_rs::error::Error> {
+//! # async fn run() -> Result<(), tickflow::error::Error> {
 //! let client = TickFlow::new("API_KEY")?;
 //! let raw = client.quotes().symbol("AAPL.US").send().await?;
 //! # let _ = raw;
@@ -36,6 +36,8 @@
 //!   snapshots
 //! - [`TickFlow::financials`](client::TickFlow::financials) — fundamental
 //!   statements
+//! - [`TickFlow::stream`](client::TickFlow::stream) — real-time
+//!   WebSocket stream for quotes and depth
 //!
 //! See the [`client`] module for builder-level configuration
 //! (custom `base_url`, timeouts, the free-tier endpoint, etc.).

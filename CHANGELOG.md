@@ -1,3 +1,8 @@
+## [0.3.0] - 2026-09-18
+
+### 🚀 Features
+
+- *(stream)* Add real-time WebSocket MarketStream with auto-reconnect
 ## [0.2.0] - 2026-09-13
 
 ### 🚀 Features
@@ -9,6 +14,7 @@
 ### 💼 Other
 
 - V0.10
+- V0.2.0
 
 ### 📚 Documentation
 
